@@ -1,0 +1,22 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        // ✅ Added Relay plugin repository
+        maven { url 'https://storage.googleapis.com/download.flutter.dev' }
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+        // ✅ Added Relay dependency repository
+        maven { url 'https://storage.googleapis.com/download.flutter.dev' }
+    }
+}
+
+rootProject.name = "HelloFigma"
+include ':app'

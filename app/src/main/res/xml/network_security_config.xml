@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Allow cleartext (HTTP) traffic for specific domains -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- IP address of development server -->
+        <domain includeSubdomains="false">157.245.43.144</domain>
+
+        <!-- Allow HTTP for specific domain (no need for subdomains if not required) -->
+        <domain includeSubdomains="false">megaplusredirection.tedata.net</domain>
+    </domain-config>
+</network-security-config>

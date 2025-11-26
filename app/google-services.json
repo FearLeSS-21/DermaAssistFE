@@ -1,0 +1,45 @@
+{
+  "project_info": {
+    "project_number": "535735015698",
+    "project_id": "derm-d230b",
+    "storage_bucket": "derm-d230b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:535735015698:android:1e8ad8b314e3a3c4ef3bcb",
+        "android_client_info": {
+          "package_name": "com.example.hellofigma"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "410448368383-2eu5uiahl07g3ig0og12kh50sdkvsj9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRDSMQBtjW2gKsYDqxxPl0wCLh4qiPvCk"
+        }
+      ],
+      "services": {
+        "google_sign_in": {
+          "status": 1,
+          "client_id": "410448368383-2eu5uiahl07g3ig0og12kh50sdkvsj9d.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        "drive": {
+          "status": 1,
+          "scopes": [
+            "https://www.googleapis.com/auth/drive.file"
+          ]
+        },
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
