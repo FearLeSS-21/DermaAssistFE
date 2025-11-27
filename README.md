@@ -29,13 +29,20 @@ The Derma Assist Front-End is the mobile application interface for a dermatology
 | `gradlew` / `gradlew.bat` | Gradle wrappers for consistent builds. |
 | `local.properties` / `credentials.json` | Local configurations (ignored by Git for security). |
 
+## 📸 Screenshots
+
+<div align="center">
+  <img src="screenshots/DermaAssistImage1.png" alt="Derma Assist Screenshot 1" width="250"/>
+  <img src="screenshots/DermaAssistImage2.png" alt="Derma Assist Screenshot 2" width="250"/>
+  <img src="screenshots/DermaAssistImage3.png" alt="Derma Assist Screenshot 3" width="250"/>
+</div>
+
 ## ⬇️ Installation (How to Download and Run)
 
 To download and run the Derma Assist front-end, follow these steps:
 
 ### 1. Clone the Repository
 Use the `git clone` command to download the project source code.
-
 ```bash
 git clone <your-repo-url>
 ```
@@ -64,21 +71,21 @@ We welcome contributions to improve the front-end design and features!
 1. **Fork this repository.**
 
 2. **Create a new feature branch:**
-   ```bash
+```bash
    git checkout -b feature-name
-   ```
+```
 
 3. **Make your front-end changes.**
 
 4. **Commit them with a clear message:**
-   ```bash
+```bash
    git commit -m "feat: Add new UI feature"
-   ```
+```
 
 5. **Push the branch:**
-   ```bash
+```bash
    git push origin feature-name
-   ```
+```
 
 6. **Open a Pull Request (PR).**
 
