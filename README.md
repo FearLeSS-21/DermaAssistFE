@@ -32,9 +32,9 @@ The Derma Assist Front-End is the mobile application interface for a dermatology
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="screenshots/DermaAssistImage1.png" alt="Derma Assist Screenshot 1" width="250"/>
-  <img src="screenshots/DermaAssistImage2.png" alt="Derma Assist Screenshot 2" width="250"/>
-  <img src="screenshots/DermaAssistImage3.png" alt="Derma Assist Screenshot 3" width="250"/>
+  <img src="screenshots/DermaAssistImage1.jpg" alt="Derma Assist Screenshot 1" width="250"/>
+  <img src="screenshots/DermaAssistImage2.jpg" alt="Derma Assist Screenshot 2" width="250"/>
+  <img src="screenshots/DermaAssistImage3.jpg" alt="Derma Assist Screenshot 3" width="250"/>
 </div>
 
 ## ⬇️ Installation (How to Download and Run)
