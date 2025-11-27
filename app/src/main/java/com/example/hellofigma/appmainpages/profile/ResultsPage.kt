@@ -1,135 +1,68 @@
 package com.example.hellofigma.appmainpages.profile
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.*
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.hellofigma.R
-import com.example.hellofigma.ui.theme.HelloFigmaTheme
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
+import com.example.hellofigma.ui.theme.*
 import kotlin.random.Random
 
 enum class Disease { Eczema, Acne, Wrinkles, Eyebags }
 enum class Region { Forehead, Nose, LeftCheek, RightCheek, Chin, LeftEye, RightEye }
 
 @Composable
-fun Results(
-    navController: NavController,
-    modifier: Modifier = Modifier
-) {
+fun Results(navController: NavController, modifier: Modifier = Modifier) {
     val mainRegions = listOf(Region.Forehead, Region.Nose, Region.LeftCheek, Region.RightCheek, Region.Chin)
     val eyeRegions = listOf(Region.LeftEye, Region.RightEye)
-    val diseases = Disease.values().toList()
     val regionDiseases = (mainRegions + eyeRegions).associateWith {
         if (it == Region.LeftEye || it == Region.RightEye) listOf(Disease.Eyebags)
-        else diseases.shuffled(Random).take(Random.nextInt(1, 3))
+        else Disease.values().toList().shuffled(Random).take(Random.nextInt(1, 3))
     }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.White)
-            .padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Text(
-            text = "Skin Analysis Results",
-            style = MaterialTheme.typography.headlineMedium.copy(
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF4741A6)
-            ),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-
-        FaceDiagnosisDisplay(regionDiseases)
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        DiagnosisSummary(regionDiseases)
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        BackToHomeButton(navController)
-    }
-}
-
-@Composable
-fun FaceDiagnosisDisplay(regionDiseases: Map<Region, List<Disease>>) {
-    Box(
-        modifier = Modifier
-            .size(280.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color.White)
-            .padding(8.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.face_base),
-            contentDescription = "Face Image",
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Fit
-        )
-    }
-}
-
-@Composable
-fun DiagnosisSummary(regionDiseases: Map<Region, List<Disease>>) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFFE0E7FF))
-            .padding(12.dp)
-    ) {
-        Disease.values().forEach { disease ->
-            val affectedRegions = regionDiseases.filterValues { it.contains(disease) }.keys
-            if (affectedRegions.isNotEmpty()) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(
-                            id = when (disease) {
-                                Disease.Eczema -> R.drawable.mini_marketx_eczema
-                                Disease.Acne -> R.drawable.mini_marketx_acne_image
-                                Disease.Wrinkles -> R.drawable.mini_marketx_wrnkles
-                                Disease.Eyebags -> R.drawable.mini_marketx_eye_black
-                            }
-                        ),
-                        contentDescription = "${disease.name} image",
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
+    HelloFigmaTheme {
+        Box(modifier = modifier.fillMaxSize().background(LightGray)) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                item {
                     Text(
-                        text = "${disease.name}: ${affectedRegions.joinToString { it.name }}",
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            fontWeight = FontWeight.Medium,
-                            color = Color(0xFF4741A6),
-                            fontSize = 14.sp
-                        )
+                        "Skin Analysis Results",
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Primary,
+                        modifier = Modifier.padding(vertical = 8.dp)
                     )
+                }
+
+                item { FaceDisplay(regionDiseases) }
+
+                items(Disease.values().toList()) { disease ->
+                    val regions = regionDiseases.filterValues { it.contains(disease) }.keys
+                    if (regions.isNotEmpty()) {
+                        DiseaseCard(disease, regions, regions.size % 2 != 0)
+                    }
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    ActionButton(navController)
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
             }
         }
@@ -137,32 +70,172 @@ fun DiagnosisSummary(regionDiseases: Map<Region, List<Disease>>) {
 }
 
 @Composable
-fun BackToHomeButton(navController: NavController) {
-    Box(
+fun FaceDisplay(regionDiseases: Map<Region, List<Disease>>) {
+    Card(
+        shape = RoundedCornerShape(24.dp),
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = White)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Brush.verticalGradient(listOf(White, LightGray)))
+                .padding(24.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.face_base),
+                contentDescription = "Face Analysis",
+                modifier = Modifier
+                    .size(240.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                contentScale = ContentScale.Fit
+            )
+        }
+    }
+}
+
+@Composable
+fun DiseaseCard(disease: Disease, regions: Set<Region>, alignRight: Boolean) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = if (alignRight) Arrangement.End else Arrangement.Start
+    ) {
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            modifier = Modifier.fillMaxWidth(0.9f),
+            colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(
+                        Brush.linearGradient(
+                            colors = when (disease) {
+                                Disease.Acne -> listOf(Primary, LinkBlue)
+                                Disease.Wrinkles -> listOf(LinkBlue, Primary)
+                                Disease.Eczema -> listOf(Primary.copy(alpha = 0.8f), LinkBlue.copy(alpha = 0.8f))
+                                Disease.Eyebags -> listOf(GrayText, Primary)
+                            }
+                        )
+                    )
+                    .padding(16.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(White.copy(alpha = 0.25f))
+                            .padding(8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Image(
+                            painter = painterResource(
+                                id = when (disease) {
+                                    Disease.Eczema -> R.drawable.mini_marketx_eczema
+                                    Disease.Acne -> R.drawable.mini_marketx_acne_image
+                                    Disease.Wrinkles -> R.drawable.mini_marketx_wrnkles
+                                    Disease.Eyebags -> R.drawable.mini_marketx_eye_black
+                                }
+                            ),
+                            contentDescription = disease.name,
+                            contentScale = ContentScale.Fit,
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            disease.name,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = White
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            "Detected in ${regions.size} ${if (regions.size == 1) "area" else "areas"}",
+                            fontSize = 13.sp,
+                            color = White.copy(alpha = 0.85f)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        RegionChips(regions)
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun RegionChips(regions: Set<Region>) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier.horizontalScroll(rememberScrollState())
+    ) {
+        regions.take(3).forEach { region ->
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                color = White.copy(alpha = 0.3f),
+                modifier = Modifier.height(26.dp)
+            ) {
+                Text(
+                    formatRegionName(region),
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                    fontSize = 12.sp,
+                    color = White,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+        }
+        if (regions.size > 3) {
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                color = White.copy(alpha = 0.3f),
+                modifier = Modifier.height(26.dp)
+            ) {
+                Text(
+                    "+${regions.size - 3}",
+                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                    fontSize = 12.sp,
+                    color = White,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ActionButton(navController: NavController) {
+    Button(
+        onClick = { navController.navigate("com/example/hellofigma/appmainpages/homepage/HomePage.kt") },
         modifier = Modifier
-            .width(160.dp)
-            .height(44.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Color(0xFF4741A6))
-            .clickable {
-                navController.navigate("com/example/hellofigma/appmainpages/homepage/HomePage.kt")
-            },
-        contentAlignment = Alignment.Center
+            .fillMaxWidth()
+            .height(56.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Primary
+        )
     ) {
         Text(
-            text = "Back to Home",
-            style = MaterialTheme.typography.labelLarge.copy(
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
+            "Back to Home",
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            color = White
         )
     }
 }
 
-@Preview
-@Composable
-fun ResultsPreview() {
-    HelloFigmaTheme {
-        Results(navController = rememberNavController())
-    }
+fun formatRegionName(region: Region): String = when (region) {
+    Region.LeftCheek -> "Left Cheek"
+    Region.RightCheek -> "Right Cheek"
+    Region.LeftEye -> "Left Eye"
+    Region.RightEye -> "Right Eye"
+    else -> region.name
 }

@@ -1,9 +1,19 @@
-
 package com.example.hellofigma.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+// Primary Colors
+val Primary = Color(0xFF4741Af)        // Buttons, logo, titles
+val LinkBlue = Color(0xFF2A9CEE)       // Clickable links like "Forgot Password?"
+val FacebookBlue = Color(0xFF3B5998)   // Facebook social login button
+
+// Background Colors
+val LightGray = Color(0xFFF5F5F5)      // App background, text fields background
+val White = Color(0xFFFFFFFF)          // Column background, text inside buttons
+
+// Text / Neutral Colors
+val GrayText = Color.Gray               // Secondary text, unfocused text fields
+val BlackText = Color.Black             // "X" social login button
+
+// Alerts / Errors
+val ErrorRed = Color.Red                // Error messages

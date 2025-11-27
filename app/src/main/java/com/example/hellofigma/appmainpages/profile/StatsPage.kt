@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,13 +22,14 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hellofigma.apptools.navigationbar.ReusableBottomNavigationBar
+import com.example.hellofigma.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsPlan(navController: NavController, modifier: Modifier = Modifier) {
     Scaffold(
         bottomBar = { ReusableBottomNavigationBar(navController) },
-        containerColor = Color(0xFFF5F5F5),
+        containerColor = LightGray,
         modifier = modifier.fillMaxSize()
     ) { padding ->
         Box(
@@ -58,14 +58,19 @@ private fun UserHeader() {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.padding(vertical = 16.dp)
     ) {
-        Text(text = "Zeyad Wael", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color(0xFF2A2A2A))
+        Text(
+            text = "Zeyad Wael",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            color = GrayText
+        )
         Icon(
             imageVector = Icons.Default.AccountCircle,
             contentDescription = null,
             modifier = Modifier
                 .size(60.dp)
                 .padding(top = 8.dp),
-            tint = Color(0xFF4741A6)
+            tint = Primary
         )
     }
 }
@@ -78,7 +83,7 @@ fun ProfileStatsTabs(navController: NavController) {
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
                 Modifier.tabIndicatorOffset(tabPositions[if (navController.currentDestination?.route == "com/example/hellofigma/appmainpages/profile/statsPage.kt") 1 else 0]),
-                color = Color(0xFF4741A6)
+                color = Primary
             )
         }
     ) {
@@ -100,7 +105,7 @@ fun ProfileStatsTabs(navController: NavController) {
                         title,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = if (navController.currentDestination?.route == route) Color(0xFF4741A6) else Color(0xFFA2A2A2)
+                        color = if (navController.currentDestination?.route == route) Primary else GrayText
                     )
                 }
             )
@@ -123,7 +128,7 @@ private fun ReportTabs(navController: NavController) {
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
                 Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                color = Color(0xFF4741A6)
+                color = Primary
             )
         }
     ) {
@@ -136,7 +141,7 @@ private fun ReportTabs(navController: NavController) {
                         title,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = if (selectedTabIndex == index) Color(0xFF4741A6) else Color(0xFFA2A2A2)
+                        color = if (selectedTabIndex == index) Primary else GrayText
                     )
                 }
             )
@@ -159,8 +164,8 @@ private fun ReportTabs(navController: NavController) {
             },
         shape = RoundedCornerShape(25.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFE6E6E6),
-            contentColor = Color(0xFF2A2A2A)
+            containerColor = White,
+            contentColor = GrayText
         )
     ) {
         Row(
@@ -174,7 +179,7 @@ private fun ReportTabs(navController: NavController) {
                 modifier = Modifier
                     .size(24.dp)
                     .padding(end = 8.dp),
-                tint = Color(0xFF4741A6)
+                tint = Primary
             )
             Text(
                 text = if (selectedTabIndex == 0) "Today’s Report Content" else "Analysis Content",
@@ -193,8 +198,8 @@ private fun ConditionProgressBars() {
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(25.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFFE6E6E6),
-            contentColor = Color(0xFF2A2A2A)
+            containerColor = White,
+            contentColor = GrayText
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
@@ -245,7 +250,7 @@ private fun ConditionItem(
                 .size(48.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .alpha(0.2f),
-            tint = Color(0xFF4741A6)
+            tint = Primary
         )
         Spacer(modifier = Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
@@ -253,7 +258,7 @@ private fun ConditionItem(
                 text = title,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Color(0xFF2A2A2A)
+                color = GrayText
             )
             Box(
                 modifier = Modifier
@@ -261,7 +266,7 @@ private fun ConditionItem(
                     .height(10.dp)
                     .padding(top = 6.dp)
                     .clip(RoundedCornerShape(124.dp))
-                    .background(Color(0xFFD0C7F8))
+                    .background(LightGray)
             ) {
                 Box(
                     modifier = Modifier
@@ -270,7 +275,7 @@ private fun ConditionItem(
                         .clip(RoundedCornerShape(124.dp))
                         .background(
                             Brush.linearGradient(
-                                colors = listOf(Color(0xFF7B61FF), Color(0xFF947EFF))
+                                colors = listOf(Primary, LinkBlue)
                             )
                         )
                 )
@@ -280,7 +285,7 @@ private fun ConditionItem(
         Text(
             text = percentage,
             fontSize = 11.sp,
-            color = Color(0xFF534C4C),
+            color = GrayText,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.End
         )
@@ -290,7 +295,7 @@ private fun ConditionItem(
 @Preview(widthDp = 412, heightDp = 865)
 @Composable
 private fun StatsPlanPreview() {
-    MaterialTheme {
+    HelloFigmaTheme {
         StatsPlan(navController = rememberNavController())
     }
 }

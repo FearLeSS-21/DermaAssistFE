@@ -1,19 +1,3 @@
-/*
- * Copyright 2022 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.example.hellofigma.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -22,28 +6,39 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
+// Dark color palette
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Primary,             // Buttons, logos, main UI
+    primaryVariant = GrayText,     // Slightly darker for variants
+    secondary = LinkBlue,          // Links
+    background = LightGray,        // App background
+    surface = White,               // Card or sheet surfaces
+    onPrimary = White,             // Text on primary elements
+    onSecondary = White,           // Text on secondary elements
+    onBackground = GrayText,       // Text on background
+    onSurface = GrayText           // Text on surfaces
 )
 
+// Light color palette
 private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
+    primary = Primary,
+    primaryVariant = GrayText,
+    secondary = LinkBlue,
+    background = LightGray,
+    surface = White,
+    onPrimary = White,
+    onSecondary = GrayText,
+    onBackground = GrayText,
+    onSurface = GrayText
 )
 
 @Composable
-fun HelloFigmaTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
-
+fun HelloFigmaTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
     MaterialTheme(
-        colors = colors,
+        colors = if (darkTheme) DarkColorPalette else LightColorPalette,
         typography = Typography,
         shapes = Shapes,
         content = content

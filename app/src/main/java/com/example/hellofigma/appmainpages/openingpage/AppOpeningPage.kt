@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -22,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.hellofigma.ui.theme.*
+
 import kotlinx.coroutines.delay
 
 @Composable
@@ -65,9 +66,9 @@ fun AppOpeningPage(navController: NavController) {
             .background(
                 Brush.linearGradient(
                     colors = listOf(
-                        Color(0xFFE8EBFF),
-                        Color(0xFFF6F8FF),
-                        Color(0xFFD8DCFF).copy(alpha = 0.8f)
+                        White.copy(alpha = 0.95f),
+                        White.copy(alpha = 0.8f),
+                        LightGray.copy(alpha = 0.6f)
                     ),
                     start = androidx.compose.ui.geometry.Offset(0f, gradientOffset * 1000f),
                     end = androidx.compose.ui.geometry.Offset(Float.POSITIVE_INFINITY, (1f - gradientOffset) * 1000f)
@@ -124,8 +125,8 @@ fun AnimatedWord(word: String, isFirstLetter: Boolean) {
             fontFamily = FontFamily.Cursive,
             brush = Brush.linearGradient(
                 colors = listOf(
-                    Color(0xFF2A1B9C),
-                    Color(0xFF5B3EFF)
+                    Primary,
+                    Primary
                 )
             ),
             textAlign = TextAlign.Center
@@ -161,15 +162,13 @@ fun AnimatedLine() {
             .background(
                 Brush.horizontalGradient(
                     colors = listOf(
-                        Color(0xFF2A1B9C),
-                        Color(0xFF5B3EFF)
+                        Primary,
+                        LinkBlue
                     )
                 )
             )
     )
 }
-
-
 
 @Preview(showSystemUi = true)
 @Composable

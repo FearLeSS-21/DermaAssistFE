@@ -3,9 +3,9 @@ package com.example.hellofigma
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -28,19 +28,20 @@ import com.example.hellofigma.appmainpages.profile.StatsPlan
 import com.example.hellofigma.settings.Settings
 import com.example.hellofigma.apptools.search.SearchPage
 import com.example.hellofigma.appmainpages.openingpage.AppOpeningPage
-// import com.example.hellofigma.apptools.chatbot.DoryVisionBotPage
+ // import com.example.hellofigma.apptools.chatbot.DoryVisionBotPage
 import com.example.hellofigma.apptools.chatbot.DoryVisionWebViewPage
-import com.example.hellofigma.apptools.webview.WebViewer
-import com.example.hellofigma.appmainpages.register.LoginPage
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             HelloFigmaTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
                     val navController = rememberNavController()
-                    AppNavHost(navController)
+                    AppNavHost(navController = navController)
                 }
             }
         }
@@ -49,25 +50,26 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) {
-    NavHost(navController = navController, startDestination = "openingPage") {
-        composable("openingPage")       { AppOpeningPage(navController) }
-        composable("loginPage")         { LoginPage(navController) }
-        composable("registerPage")      { RegisterPage(navController) }
-        composable("homePage")          { Home(navController) }
-        composable("miniMarketPage")    { Minimarket(navController) }
-        composable("personalInfo")      { PersonalInfo(navController) }
-        composable("statsPlan")         { StatsPlan(navController) }
-        composable("results")           { Results(navController) }
-        composable("progTrack")         { ProgTrack(navController) }
-        composable("darkSpots")         { Dark(navController) }
-        composable("acne")              { Acne(navController) }
-        composable("eczema")            { Eczema(navController) }
-        composable("wrinkles")          { Wrinkles(navController) }
-        composable("cameraDetection")   { CamScreen(navController) }
-        composable("settings")          { Settings(navController) }
-        composable("search")            { SearchPage(navController) }
-        composable("chatBot")           { DoryVisionWebViewPage(navController) }
-        composable("wishlist")          { Wishlist(navController) }
-        composable("webViewer")         { WebViewer(navController) }
+    NavHost(navController = navController, startDestination = "com/example/hellofigma/appmainpages/openingpage/AppOpeningPage.kt") {
+        composable("com/example/hellofigma/appmainpages/openingpage/AppOpeningPage.kt")         { AppOpeningPage(navController) }
+        composable("com/example/hellofigma/appmainpages/register/LoginPage.kt")                 { com.example.hellofigma.appmainpages.register.LoginPage(navController) }
+        composable("com/example/hellofigma/appmainpages/register/RegisterPage.kt")              { RegisterPage(navController) }
+        composable("com/example/hellofigma/appmainpages/homepage/HomePage.kt")                  { Home(navController) }
+        composable("com/example/hellofigma/appmainpages/minimarket/MiniMarketPage.kt")          { Minimarket(navController) }
+        composable("com/example/hellofigma/appmainpages/profile/PersonalDataPage.kt")           { PersonalInfo(navController) }
+        composable("com/example/hellofigma/appmainpages/profile/statsPage.kt")                  { StatsPlan(navController) }
+        composable("com/example/hellofigma/appmainpages/profile/results.kt")                    { Results(navController) }
+        composable("com/example/hellofigma/appmainpages/profile/ProgTrack.kt")                  { ProgTrack(navController) }
+        composable("com/example/hellofigma/facediseases/darkspots/DarkEyeSpotsPage.kt")         { Dark(navController) }
+        composable("com/example/hellofigma/facediseases/acne/acne.kt")                          { Acne(navController) }
+        composable("com/example/hellofigma/facediseases/eczema/EczemaPage.kt")                  { Eczema(navController) }
+        composable("com/example/hellofigma/facediseases/wrinkles/WrinklePage.kt")               { Wrinkles(navController) }
+        composable("com/example/hellofigma/apptools/cameradetection/CameraDetectionPage.kt")    { CamScreen(navController) }
+        composable("com/example/hellofigma/apptools/settings/AppSettingsPage.kt")               { Settings(navController) }
+        composable("com/example/hellofigma/apptools/search/SearchPage.kt")                      { SearchPage(navController) }
+        composable("com/example/hellofigma/apptools/chatbot/OlamaChatBotPage.kt")               { DoryVisionWebViewPage(navController) }
+
+        composable("com/example/hellofigma/apptools/wishlist/WishlistPage.kt")          { Wishlist(navController) }
+        composable("com/example/hellofigma/apptools/webview/WebViewer.kt")              { com.example.hellofigma.apptools.webview.WebViewer(navController) }
     }
 }

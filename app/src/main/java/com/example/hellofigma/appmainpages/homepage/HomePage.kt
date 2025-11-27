@@ -19,11 +19,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,16 +36,13 @@ import com.example.hellofigma.R
 import com.example.hellofigma.apptools.navigationbar.ReusableBottomNavigationBar
 import com.example.hellofigma.apptools.wishlist.WishlistItem
 import com.example.hellofigma.apptools.wishlist.WishlistViewModel
+import com.example.hellofigma.ui.theme.*
 import kotlinx.coroutines.launch
 
-// ViewModel to persist cart count across navigation
 class CartViewModel : ViewModel() {
     var cartCount by mutableStateOf(0)
         private set
-
-    fun addItem() {
-        cartCount++
-    }
+    fun addItem() { cartCount++ }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -70,35 +65,35 @@ fun Home(
                             text = "Hello (Zeyad Wael)",
                             fontSize = 28.sp,
                             fontWeight = FontWeight.ExtraBold,
-                            color = Color(0xFF4741A6),
-                            style = TextStyle(fontFamily = FontFamily.Cursive)
+                            color = Primary,
+                            fontFamily = FontFamily.Cursive
                         )
                         Text(
                             text = "Welcome To DermaAssist",
                             fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = GrayText
                         )
                     }
                 },
                 actions = {
                     IconButton(onClick = { navController.navigate("com/example/hellofigma/apptools/search/SearchPage.kt") }) {
-                        Icon(Icons.Default.Search, contentDescription = "Search")
+                        Icon(Icons.Default.Search, contentDescription = "Search", tint = Primary)
                     }
                     Box(contentAlignment = Alignment.TopEnd) {
                         IconButton(onClick = { navController.navigate("com/example/hellofigma/apptools/wishlist/WishlistPage.kt") }) {
-                            Icon(Icons.Default.ShoppingCart, contentDescription = "Wishlist")
+                            Icon(Icons.Default.ShoppingCart, contentDescription = "Wishlist", tint = Primary)
                         }
                         if (cartViewModel.cartCount > 0) {
                             Box(
-                                modifier = Modifier
+                                Modifier
                                     .offset(x = (-4).dp, y = 4.dp)
                                     .size(18.dp)
-                                    .background(Color.Red, shape = RoundedCornerShape(9.dp)),
+                                    .background(ErrorRed, shape = RoundedCornerShape(9.dp)),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
                                     text = "${cartViewModel.cartCount}",
-                                    color = Color.White,
+                                    color = White,
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold
                                 )
@@ -107,38 +102,29 @@ fun Home(
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFFBFBFB)
+                    containerColor = White
                 )
             )
         },
         bottomBar = { ReusableBottomNavigationBar(navController) },
-        containerColor = Color(0xFFFBFBFB),
+        containerColor = White,
         modifier = modifier.fillMaxSize()
     ) { padding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(horizontal = 16.dp)
+            Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
             Text(
                 text = "Best Selling Products",
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
+                color = BlackText,
                 modifier = Modifier.padding(vertical = 8.dp)
             )
-            ProductGrid(
-                navController,
-                wishlistViewModel,
-                cartViewModel,
-                modifier = Modifier.weight(1f),
-                context,
-                coroutineScope
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            ProductGrid(navController, wishlistViewModel, cartViewModel, Modifier.weight(1f), context, coroutineScope)
+            Spacer(Modifier.height(16.dp))
             SeeMoreButton(navController)
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
@@ -160,14 +146,7 @@ fun ProductGrid(
         modifier = modifier.fillMaxWidth()
     ) {
         items(6) { index ->
-            ProductCard(
-                navController,
-                wishlistViewModel,
-                cartViewModel,
-                productId = index,
-                context,
-                coroutineScope
-            )
+            ProductCard(navController, wishlistViewModel, cartViewModel, index, context, coroutineScope)
         }
     }
 }
@@ -207,14 +186,7 @@ fun ProductCard(
         "Deep Moisturizer",
         "B5 Protection"
     )
-    val prices = listOf(
-        "250 EGP",
-        "350 EGP",
-        "300 EGP",
-        "200 EGP",
-        "280 EGP",
-        "320 EGP"
-    )
+    val prices = listOf("250 EGP","350 EGP","300 EGP","200 EGP","280 EGP","320 EGP")
 
     val imageRes = images[productId % images.size]
     val productName = productNames[productId % productNames.size]
@@ -224,15 +196,10 @@ fun ProductCard(
     Card(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(0.75f)
-            .clickable { showDialog = true }
+        modifier = Modifier.fillMaxWidth().aspectRatio(0.75f).clickable { showDialog = true }
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
+            Modifier.fillMaxSize().padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -240,53 +207,24 @@ fun ProductCard(
                 painter = painterResource(imageRes),
                 contentDescription = "Product Image",
                 contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(100.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                modifier = Modifier.size(100.dp).clip(RoundedCornerShape(8.dp))
             )
-            Text(
-                text = productName,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 2,
-                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = description,
-                fontSize = 13.sp,
-                color = Color(0xFF7C7B7B),
-                textAlign = TextAlign.Center,
-                maxLines = 2,
-                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis,
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Text(
-                text = price,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Text(productName, fontSize = 15.sp, fontWeight = FontWeight.Bold, maxLines = 2, textAlign = TextAlign.Center)
+            Text(description, fontSize = 13.sp, color = GrayText, textAlign = TextAlign.Center, maxLines = 2)
+            Text(price, fontSize = 15.sp, fontWeight = FontWeight.Bold)
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = "Add to Wishlist",
                 modifier = Modifier
                     .size(32.dp)
-                    .background(Color(0xFF4741A6), shape = RoundedCornerShape(8.dp))
+                    .background(Primary, shape = RoundedCornerShape(8.dp))
                     .clickable {
-                        val priceValue = price.replace(" EGP", "").toDoubleOrNull() ?: 0.0
-                        wishlistViewModel.addToWishlist(
-                            WishlistItem(
-                                name = productName,
-                                category = description,
-                                price = priceValue
-                            )
-                        )
-                        cartViewModel.addItem() // increment cart count
-                        coroutineScope.launch {
-                            Toast.makeText(context, "$productName added to wishlist", Toast.LENGTH_SHORT).show()
-                        }
+                        val priceValue = price.replace(" EGP","").toDoubleOrNull() ?: 0.0
+                        wishlistViewModel.addToWishlist(WishlistItem(productName, description, priceValue))
+                        cartViewModel.addItem()
+                        coroutineScope.launch { Toast.makeText(context, "$productName added to wishlist", Toast.LENGTH_SHORT).show() }
                     },
-                tint = Color.White
+                tint = White
             )
         }
     }
@@ -296,32 +234,15 @@ fun ProductCard(
 fun SeeMoreButton(navController: NavController) {
     Button(
         onClick = { navController.navigate("com/example/hellofigma/appmainpages/minimarket/MiniMarketPage.kt") },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .shadow(4.dp, RoundedCornerShape(12.dp))
-            .background(Color(0xFF4741A6)),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF4741A6),
-            contentColor = Color.White
-        ),
-        contentPadding = PaddingValues(horizontal = 16.dp)
+        modifier = Modifier.fillMaxWidth().height(48.dp).clip(RoundedCornerShape(12.dp)).shadow(4.dp, RoundedCornerShape(12.dp)),
+        colors = ButtonDefaults.buttonColors(containerColor = Primary, contentColor = White)
     ) {
-        Text(
-            text = "See More",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            textAlign = TextAlign.Center
-        )
+        Text("See More", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = White, textAlign = TextAlign.Center)
     }
 }
 
 @Preview(showBackground = true, widthDp = 412, heightDp = 865)
 @Composable
 fun HomePreview() {
-    MaterialTheme {
-        Home(navController = rememberNavController())
-    }
+    Home(navController = rememberNavController())
 }
