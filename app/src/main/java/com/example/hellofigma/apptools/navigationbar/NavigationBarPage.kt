@@ -10,18 +10,14 @@ import androidx.compose.material.icons.filled.Chat
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.compose.material3.MaterialTheme
+import androidx.navigation.compose.currentBackStackEntryAsState  // THIS IS THE CORRECT ONE
+import com.example.hellofigma.ui.theme.*
 
 @Composable
 fun ReusableBottomNavigationBar(navController: NavController) {
@@ -29,8 +25,8 @@ fun ReusableBottomNavigationBar(navController: NavController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     NavigationBar(
-        containerColor = Color(0xFFFBFBFB),
-        contentColor = MaterialTheme.colorScheme.primary
+        containerColor = BottomNavBackground,
+        contentColor = Primary
     ) {
         NavigationBarItem(
             icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
@@ -57,13 +53,13 @@ fun ReusableBottomNavigationBar(navController: NavController) {
         NavigationBarItem(
             icon = {
                 Icon(
-                    Icons.Default.Add,
+                    imageVector = Icons.Default.Add,
                     contentDescription = "Add",
                     modifier = Modifier
                         .size(40.dp)
-                        .background(Color(0xFF4741A6), shape = RoundedCornerShape(20.dp))
+                        .background(Primary, RoundedCornerShape(20.dp))
                         .padding(8.dp),
-                    tint = Color.White
+                    tint = White
                 )
             },
             label = { Text("Add") },

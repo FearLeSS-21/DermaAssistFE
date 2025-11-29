@@ -15,11 +15,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,20 +29,16 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hellofigma.R
 import com.example.hellofigma.apptools.navigationbar.ReusableBottomNavigationBar
+import com.example.hellofigma.ui.theme.*  // Only these colors
 import kotlin.random.Random
-
-private val PrimaryColor = Color(0xFF4741A6)
-private val BackgroundColor = Color(0xFFFBFBFB)
-private val CardBackgroundColor = Color(0xFFE6E6E6)
-private val SecondaryTextColor = Color(0xFF7C7B7B)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Acne(navController: NavController, modifier: Modifier = Modifier) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Hello Mohab!\nWelcome To DermaAssist", fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = PrimaryColor) }, actions = { IconButton(onClick = { navController.navigate("search") }) { Icon(Icons.Default.Search, null) }; IconButton(onClick = { navController.navigate("minimarket") }) { Icon(Icons.Default.ShoppingCart, null) } }, colors = TopAppBarDefaults.topAppBarColors(containerColor = BackgroundColor)) },
+        topBar = { TopAppBar(title = { Text("Hello Mohab!\nWelcome To DermaAssist", fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = Primary) }, actions = { IconButton(onClick = { navController.navigate("search") }) { Icon(Icons.Default.Search, null) }; IconButton(onClick = { navController.navigate("minimarket") }) { Icon(Icons.Default.ShoppingCart, null) } }, colors = TopAppBarDefaults.topAppBarColors(containerColor = BottomNavBackground)) },
         bottomBar = { ReusableBottomNavigationBar(navController) },
-        containerColor = BackgroundColor,
+        containerColor = BottomNavBackground,
         modifier = modifier.fillMaxSize()
     ) { padding ->
         Column(modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp).verticalScroll(rememberScrollState())) {
@@ -82,9 +75,18 @@ fun ProductCard(navController: NavController, productId: Int) {
     val keyIngredient = keyIngredients[productId % keyIngredients.size]
     val randomPrice = Random.nextInt(200, 501)
 
-    Card(shape = RoundedCornerShape(12.dp), elevation = CardDefaults.cardElevation(), colors = CardDefaults.cardColors(containerColor = CardBackgroundColor), modifier = Modifier.fillMaxWidth().aspectRatio(0.75f).clickable { showDialog = true }) {
+    Card(
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(containerColor = SearchBarBackground),
+        modifier = Modifier.fillMaxWidth().aspectRatio(0.75f).clickable { showDialog = true }
+    ) {
         Column(Modifier.fillMaxSize().padding(8.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.SpaceBetween) {
-            Image(painter = painterResource(imageRes), contentDescription = "Product Image", contentScale = ContentScale.Fit, modifier = Modifier.size(140.dp).background(Color(0xFFD3D3D3), RoundedCornerShape(8.dp)).clip(RoundedCornerShape(8.dp)))
+            Image(
+                painter = painterResource(imageRes),
+                contentDescription = "Product Image",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(140.dp).background(SearchBarBackground).clip(RoundedCornerShape(8.dp))
+            )
             Spacer(Modifier.height(8.dp))
             Text(productName, fontSize = 15.sp, fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis, textAlign = TextAlign.Center)
             Spacer(Modifier.height(8.dp))
@@ -92,11 +94,32 @@ fun ProductCard(navController: NavController, productId: Int) {
     }
 
     if (showDialog) {
-        AlertDialog(onDismissRequest = { showDialog = false }, text = { Column(Modifier.padding(12.dp).fillMaxWidth()) { Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) { Image(painter = painterResource(imageRes), contentDescription = "Product Image", contentScale = ContentScale.Fit, modifier = Modifier.size(100.dp).background(Color(0xFFD3D3D3), RoundedCornerShape(8.dp)).clip(RoundedCornerShape(8.dp))); Text(productName, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = PrimaryColor, modifier = Modifier.weight(1f).padding(start = 12.dp)) }; Text(description, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = Color(0xFF555555), textAlign = TextAlign.Justify, lineHeight = 18.sp); Text("Size: $size", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Color.Black); Text("Use: $usageInstruction", fontSize = 12.sp, color = Color(0xFF555555), lineHeight = 16.sp); Text("Ingredients: $keyIngredient", fontSize = 12.sp, color = Color(0xFF555555), lineHeight = 16.sp); Text("$randomPrice EGP", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = PrimaryColor, modifier = Modifier.align(Alignment.End)) } }, confirmButton = { TextButton(onClick = { showDialog = false }, modifier = Modifier.fillMaxWidth().padding(8.dp)) { Text("Close", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = PrimaryColor) } }, modifier = Modifier.widthIn(max = 320.dp).clip(RoundedCornerShape(12.dp)).background(Color.White))
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            text = {
+                Column(Modifier.padding(12.dp).fillMaxWidth()) {
+                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
+                        Image(painter = painterResource(imageRes), contentDescription = "Product Image", contentScale = ContentScale.Fit, modifier = Modifier.size(100.dp).background(SearchBarBackground).clip(RoundedCornerShape(8.dp)))
+                        Text(productName, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = Primary, modifier = Modifier.weight(1f).padding(start = 12.dp))
+                    }
+                    Text(description, fontSize = 14.sp, fontWeight = FontWeight.Medium, color = TextSecondary, textAlign = TextAlign.Justify, lineHeight = 18.sp)
+                    Text("Size: $size", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = BlackText)
+                    Text("Use: $usageInstruction", fontSize = 12.sp, color = TextSecondary)
+                    Text("Ingredients: $keyIngredient", fontSize = 12.sp, color = TextSecondary)
+                    Text("$randomPrice EGP", fontSize = 16.sp, fontWeight = FontWeight.Bold, color = Primary, modifier = Modifier.align(Alignment.End))
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false }, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                    Text("Close", fontSize = 14.sp, fontWeight = FontWeight.SemiBold, color = Primary)
+                }
+            },
+            modifier = Modifier.clip(RoundedCornerShape(12.dp)).background(White)
+        )
     }
 }
 
-@Preview(showBackground = true, widthDp = 412, heightDp = 865)
+@Preview(showBackground = true)
 @Composable
 fun AcnePreview() {
     MaterialTheme { Acne(rememberNavController()) }

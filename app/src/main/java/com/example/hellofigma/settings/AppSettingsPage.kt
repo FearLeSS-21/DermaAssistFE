@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.hellofigma.apptools.navigationbar.ReusableBottomNavigationBar
+import com.example.hellofigma.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,20 +44,20 @@ fun Settings(navController: NavController, modifier: Modifier = Modifier) {
                         text = "DermaAssist",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF4741A6)
+                        color = Primary
                     )
                 },
                 actions = {
                     IconButton(onClick = { navController.navigate("com/example/hellofigma/apptools/search/SearchPage.kt") }) {
-                        Icon(Icons.Default.Search, contentDescription = "Search", tint = Color(0xFF4741A6))
+                        Icon(Icons.Default.Search, contentDescription = "Search", tint = Primary)
                     }
                     IconButton(onClick = { navController.navigate("com/example/hellofigma/apptools/wishlist/WishlistPage.kt") }) {
-                        Icon(Icons.Default.ShoppingCart, contentDescription = "Cart", tint = Color(0xFF4741A6))
+                        Icon(Icons.Default.ShoppingCart, contentDescription = "Cart", tint = Primary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White,
-                    titleContentColor = Color(0xFF4741A6)
+                    containerColor = White,
+                    titleContentColor = Primary
                 )
             )
         },
@@ -70,7 +70,7 @@ fun Settings(navController: NavController, modifier: Modifier = Modifier) {
                 ReusableBottomNavigationBar(navController = navController)
             }
         },
-        containerColor = Color.White,
+        containerColor = White,
         modifier = modifier.fillMaxSize()
     ) { padding ->
         LazyColumn(
@@ -86,7 +86,7 @@ fun Settings(navController: NavController, modifier: Modifier = Modifier) {
                     text = "Settings",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Color(0xFF4741A6),
+                    color = Primary,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
@@ -122,12 +122,10 @@ fun SettingsItem(title: String, description: String, onClick: () -> Unit) {
                 elevation = if (isHovered) 8.dp else 2.dp,
                 shape = RoundedCornerShape(16.dp)
             )
-            .background(Color(0xFFF5F5F5)),
-        colors = CardColors(
-            containerColor = Color(0xFFF5F5F5),
-            contentColor = Color.Black,
-            disabledContainerColor = Color.Gray,
-            disabledContentColor = Color.DarkGray
+            .background(LightGray),
+        colors = CardDefaults.cardColors(
+            containerColor = LightGray,
+            contentColor = BlackText
         ),
         onClick = { onClick() }
     ) {
@@ -137,19 +135,17 @@ fun SettingsItem(title: String, description: String, onClick: () -> Unit) {
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFF1A1A1A)
+                    color = BlackText
                 )
                 Text(
                     text = description,
                     fontSize = 12.sp,
-                    color = Color(0xFF666666)
+                    color = TextSecondary
                 )
             }
             Icon(
@@ -158,9 +154,9 @@ fun SettingsItem(title: String, description: String, onClick: () -> Unit) {
                 modifier = Modifier
                     .size(24.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF4741A6))
+                    .background(Primary)
                     .padding(4.dp),
-                tint = Color.White
+                tint = White
             )
         }
     }

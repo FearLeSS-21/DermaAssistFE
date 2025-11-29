@@ -1,11 +1,6 @@
 package com.example.hellofigma.apptools.wishlist
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,27 +20,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.layout.ContentScale
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.hellofigma.R
 import com.example.hellofigma.apptools.navigationbar.ReusableBottomNavigationBar
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.layout.ContentScale
-
-private val PurpleAccent = Color(0xFF4741A6)
-private val LightBackground = Color.White
-private val SecondaryTextColor = Color(0xFF666666)
-private val GradientStart = Color(0xFF4741A6)
-private val GradientEnd = Color(0xFF7B74D6)
+import com.example.hellofigma.ui.theme.*   // Brings in Primary, White, TextSecondary, DeleteRed, GradientEnd
 
 class WishlistViewModel : ViewModel() {
     val wishlistItems = mutableStateListOf<WishlistItem>()
@@ -76,15 +65,14 @@ fun Wishlist(navController: NavController, viewModel: WishlistViewModel = viewMo
                         text = "Your Wishlist",
                         fontSize = 24.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        fontFamily = FontFamily.SansSerif,
-                        color = PurpleAccent
+                        color = Primary
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = LightBackground)
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = White)
             )
         },
         bottomBar = { ReusableBottomNavigationBar(navController) },
-        containerColor = LightBackground
+        containerColor = White
     ) { padding ->
         Column(
             modifier = Modifier
@@ -124,7 +112,7 @@ fun EmptyWishlistState() {
         Icon(
             imageVector = Icons.Default.ShoppingCart,
             contentDescription = "Empty Wishlist",
-            tint = SecondaryTextColor,
+            tint = TextSecondary,
             modifier = Modifier.size(64.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -132,13 +120,13 @@ fun EmptyWishlistState() {
             text = "Your Wishlist is Empty",
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
-            color = SecondaryTextColor,
+            color = TextSecondary,
             textAlign = TextAlign.Center
         )
         Text(
             text = "Add some products to get started!",
             fontSize = 16.sp,
-            color = SecondaryTextColor,
+            color = TextSecondary,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 8.dp)
         )
@@ -166,9 +154,8 @@ fun WishlistCard(item: WishlistItem, onRemove: () -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(6.dp, RoundedCornerShape(16.dp))
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.White),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+                .clip(RoundedCornerShape(16.dp)),
+            colors = CardDefaults.cardColors(containerColor = CardBackground)
         ) {
             Row(
                 modifier = Modifier
@@ -184,7 +171,7 @@ fun WishlistCard(item: WishlistItem, onRemove: () -> Unit) {
                     modifier = Modifier
                         .size(80.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFFD3D3D3))
+                        .background(SearchBarBackground) // light gray behind image
                 )
                 Column(
                     modifier = Modifier
@@ -195,24 +182,21 @@ fun WishlistCard(item: WishlistItem, onRemove: () -> Unit) {
                         text = item.name,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.SansSerif,
-                        color = PurpleAccent,
+                        color = Primary,
                         maxLines = 2,
                         overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                     )
                     Text(
                         text = item.category,
                         fontSize = 14.sp,
-                        fontFamily = FontFamily.SansSerif,
-                        color = SecondaryTextColor,
+                        color = TextSecondary,
                         modifier = Modifier.padding(top = 4.dp)
                     )
                     Text(
                         text = "${item.price} EGP",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
-                        fontFamily = FontFamily.SansSerif,
-                        color = Color.Black,
+                        color = BlackText,
                         modifier = Modifier.padding(top = 6.dp)
                     )
                 }
@@ -227,7 +211,7 @@ fun WishlistCard(item: WishlistItem, onRemove: () -> Unit) {
                     Icon(
                         imageVector = Icons.Default.Delete,
                         contentDescription = "Remove item",
-                        tint = Color(0xFFD32F2F),
+                        tint = DeleteRed,
                         modifier = Modifier.size(24.dp)
                     )
                 }
@@ -253,12 +237,12 @@ fun ProceedToPaymentButton() {
                 .clip(RoundedCornerShape(16.dp))
                 .background(
                     brush = Brush.linearGradient(
-                        colors = listOf(GradientStart, GradientEnd)
+                        colors = listOf(Primary, GradientEnd)
                     )
                 ),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
-                contentColor = Color.White
+                contentColor = White
             ),
             contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
@@ -266,8 +250,7 @@ fun ProceedToPaymentButton() {
                 text = "Proceed to Payment",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = FontFamily.SansSerif,
-                color = Color.White,
+                color = White,
                 textAlign = TextAlign.Center
             )
         }

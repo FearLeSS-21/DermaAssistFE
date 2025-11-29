@@ -1,4 +1,3 @@
-
 package com.example.hellofigma.apptools.webview
 
 import android.Manifest
@@ -13,29 +12,24 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import com.example.hellofigma.BuildConfig
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
+import com.example.hellofigma.ui.theme.*   // ← ALL COLORS COME FROM HERE NOW
 
-// Configurable URL (replace with your actual URL in BuildConfig or elsewhere)
 const val WEBVIEW_URL = "http://157.245.43.144:8501/"
-
-// Custom constant to replace RESULT_OK
 const val SUCCESS_RESULT_CODE = -1
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -47,9 +41,8 @@ fun WebViewer(navController: NavHostController) {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
-    // File chooser launcher
     val fileChooserLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == SUCCESS_RESULT_CODE) { // Check if SUCCESS_RESULT_CODE is resolved
+        if (result.resultCode == SUCCESS_RESULT_CODE) {
             webViewState.filePathCallback?.onReceiveValue(result.data?.data?.let { arrayOf(it) } ?: emptyArray())
         } else {
             webViewState.filePathCallback?.onReceiveValue(null)
@@ -57,17 +50,20 @@ fun WebViewer(navController: NavHostController) {
         webViewState.filePathCallback = null
     }
 
-    // Handle camera permission
+    // Camera permission screen
     if (!cameraPermissionState.status.isGranted) {
         LaunchedEffect(Unit) {
             cameraPermissionState.launchPermissionRequest()
         }
         if (!cameraPermissionState.status.isGranted) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Camera permission is required for this feature.")
-                    Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
-                        Text("Grant Permission")
+            Box(modifier = Modifier.fillMaxSize().background(White), contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text("Camera permission is required for this feature.", color = BlackText, fontSize = 18.sp)
+                    Button(
+                        onClick = { cameraPermissionState.launchPermissionRequest() },
+                        colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                    ) {
+                        Text("Grant Permission", color = White)
                     }
                 }
             }
@@ -75,33 +71,38 @@ fun WebViewer(navController: NavHostController) {
         }
     }
 
-    // Handle back navigation
     BackHandler(enabled = webViewState.webView?.canGoBack() == true) {
         webViewState.webView?.goBack() ?: navController.popBackStack()
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().background(White)) {
         if (errorMessage != null) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = errorMessage ?: "Failed to load webpage")
-                    Button(onClick = {
-                        errorMessage = null
-                        webViewState.webView?.reload()
-                    }) {
-                        Text("Retry")
+                Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(text = errorMessage ?: "Failed to load webpage", color = TrueRed, fontSize = 18.sp)
+                    Button(
+                        onClick = {
+                            errorMessage = null
+                            webViewState.webView?.reload()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                    ) {
+                        Text("Retry", color = White)
                     }
-                    Button(onClick = { navController.popBackStack() }) {
-                        Text("Go Back")
+                    Button(
+                        onClick = { navController.popBackStack() },
+                        colors = ButtonDefaults.buttonColors(containerColor = TextSecondary)
+                    ) {
+                        Text("Go Back", color = White)
                     }
                 }
             }
         } else {
             Column(modifier = Modifier.fillMaxSize()) {
                 AndroidView(
-                    modifier = Modifier.weight(1f).background(Color.White),
-                    factory = { context ->
-                        WebView(context).apply {
+                    modifier = Modifier.weight(1f).background(White),
+                    factory = { ctx ->
+                        WebView(ctx).apply {
                             webViewState.webView = this
                             settings.apply {
                                 javaScriptEnabled = true
@@ -113,9 +114,9 @@ fun WebViewer(navController: NavHostController) {
                                 setGeolocationEnabled(true)
                                 loadWithOverviewMode = true
                                 useWideViewPort = true
-                                setSupportZoom(true) // Enable zoom support
-                                builtInZoomControls = true // Enable built-in zoom controls (pinch-to-zoom)
-                                displayZoomControls = false // Hide built-in zoom buttons, rely on pinch or custom controls
+                                setSupportZoom(true)
+                                builtInZoomControls = true
+                                displayZoomControls = false
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
                                 }
@@ -146,7 +147,6 @@ fun WebViewer(navController: NavHostController) {
                                     errorResponse: WebResourceResponse?
                                 ) {
                                     errorMessage = "HTTP Error: ${errorResponse?.statusCode} ${errorResponse?.reasonPhrase}"
-                                    android.util.Log.e("WebView", "HTTP Error: ${errorResponse?.statusCode}")
                                 }
                                 override fun onReceivedError(
                                     view: WebView?,
@@ -155,7 +155,6 @@ fun WebViewer(navController: NavHostController) {
                                 ) {
                                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                         errorMessage = "Error: ${error?.description}"
-                                        android.util.Log.e("WebView", "Error: ${error?.description}")
                                     }
                                 }
                                 override fun shouldOverrideUrlLoading(
@@ -163,7 +162,6 @@ fun WebViewer(navController: NavHostController) {
                                     request: WebResourceRequest?
                                 ): Boolean {
                                     val url = request?.url?.toString() ?: return false
-                                    android.util.Log.d("WebView", "Loading URL: $url")
                                     if (url.startsWith("http://") || url.startsWith("https://")) {
                                         view?.loadUrl(url)
                                         return true
@@ -174,10 +172,6 @@ fun WebViewer(navController: NavHostController) {
                             webChromeClient = object : WebChromeClient() {
                                 override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
                                     consoleMessage?.let {
-                                        android.util.Log.d(
-                                            "WebViewConsole",
-                                            "${it.message()} -- From line ${it.lineNumber()} of ${it.sourceId()}"
-                                        )
                                         if (it.messageLevel() == ConsoleMessage.MessageLevel.ERROR) {
                                             Toast.makeText(context, "JS Error: ${it.message()}", Toast.LENGTH_LONG).show()
                                         }
@@ -219,21 +213,37 @@ fun WebViewer(navController: NavHostController) {
                         webViewState.savedState = bundle
                     }
                 )
-                // Custom zoom controls
+
+                // Zoom controls at bottom
                 Row(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly
+                    modifier = Modifier
+
+                        .padding(16.dp)
+                        .background(CardBackground.copy(alpha = 0.95f), RoundedCornerShape(12.dp))
+                        .padding(horizontal = 20.dp, vertical = 10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Button(onClick = { webViewState.webView?.zoomOut() }) {
-                        Text("Zoom Out")
+                    Button(
+                        onClick = { webViewState.webView?.zoomOut() },
+                        colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                    ) {
+                        Text("Zoom Out", color = White)
                     }
-                    Button(onClick = { webViewState.webView?.zoomIn() }) {
-                        Text("Zoom In")
+                    Button(
+                        onClick = { webViewState.webView?.zoomIn() },
+                        colors = ButtonDefaults.buttonColors(containerColor = Primary)
+                    ) {
+                        Text("Zoom In", color = White)
                     }
                 }
             }
+
             if (webViewState.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                    color = Primary,
+                    strokeWidth = 5.dp
+                )
             }
         }
     }
@@ -248,6 +258,4 @@ class WebViewState {
 }
 
 @Composable
-fun rememberWebViewState(): WebViewState {
-    return remember { WebViewState() }
-}
+fun rememberWebViewState(): WebViewState = remember { WebViewState() }

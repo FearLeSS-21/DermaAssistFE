@@ -9,27 +9,29 @@ import androidx.compose.runtime.Composable
 // Dark color palette
 private val DarkColorPalette = darkColors(
     primary = Primary,             // Buttons, logos, main UI
-    primaryVariant = GrayText,     // Slightly darker for variants
+    primaryVariant = PurpleLight,  // Slightly darker/lighter for variants (from Color.kt)
     secondary = LinkBlue,          // Links
     background = LightGray,        // App background
     surface = White,               // Card or sheet surfaces
+    error = TrueRed,               // Errors/alerts (from Color.kt)
     onPrimary = White,             // Text on primary elements
     onSecondary = White,           // Text on secondary elements
-    onBackground = GrayText,       // Text on background
-    onSurface = GrayText           // Text on surfaces
+    onBackground = TextSecondary,  // Text on background (from Color.kt)
+    onSurface = TextSecondary      // Text on surfaces (from Color.kt)
 )
 
 // Light color palette
 private val LightColorPalette = lightColors(
     primary = Primary,
-    primaryVariant = GrayText,
+    primaryVariant = PurpleLight,  // Variants (from Color.kt)
     secondary = LinkBlue,
     background = LightGray,
     surface = White,
+    error = TrueRed,               // Errors (from Color.kt)
     onPrimary = White,
     onSecondary = GrayText,
-    onBackground = GrayText,
-    onSurface = GrayText
+    onBackground = TextSecondary,  // Better text contrast (from Color.kt)
+    onSurface = TextSecondary      // Better text contrast (from Color.kt)
 )
 
 @Composable
